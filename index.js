@@ -49,6 +49,16 @@ app.get('/measurements', (req, res) => {
   });
 });
 
+// Rota para resetar o banco (deletar todos os dados)
+app.delete('/reset', (req, res) => {
+    db.serialize(() => {
+      db.run('DELETE FROM measurements', (err) => {
+        if (err) return res.status(400).json({ error: err.message });
+      });
+    });
+    res.json({ message: 'Todos os dados foram apagados.' });
+  });
+
 // Iniciar servidor
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
